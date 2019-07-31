@@ -1,3 +1,4 @@
+
 require 'rails_helper'
 
 feature 'User can check best answer', %q{
