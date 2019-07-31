@@ -3,6 +3,10 @@
 .question 
   = render 'question'
 
+- if @question.file.attached?
+  p= link_to @question.file.filename.to_s, url_for(@question.file)
+ 
+
 hr 
 
 .answer-errors
