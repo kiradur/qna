@@ -12,11 +12,17 @@ class Answer < ApplicationRecord
 
   default_scope {order(best: :desc)}
 
-  def check_best
-    transaction do
-      question.answers.update_all(best: false)
+   def best!
+    return if best
+
+    Answer.transaction do
+      Answer.where(question_id: question_id, best: true).update_all(best: false)
       update!(best: true)
-    end  
+      update!(badge: question.badge) if question.badge
+    end
   end
-  
+
+  def best?
+    best
+  end
 end

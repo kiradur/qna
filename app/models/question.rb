@@ -5,7 +5,6 @@ class Question < ApplicationRecord
   has_one :badge
 
   has_many_attached :files
-  has_one_attached :image
 
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :badge, reject_if: :all_blank, allow_destroy: true

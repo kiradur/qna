@@ -1,12 +1,18 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]  
 
+  expose :questions, -> { Question.all }
+  expose :question, scope: -> { Question.with_attached_files }
+  expose :answers, from: :question
+  expose :answer, -> { Answer.new }
+
   def index
     @questions = Question.all
   end
   
   def new
     question.links.new
+    question.build_badge
   end
 
   def show
@@ -20,6 +26,7 @@ class QuestionsController < ApplicationController
     if @question.save
       redirect_to @question, notice: 'Your question successfully created.'
     else
+      uestion.build_badge unless question.badge
       render :new
     end  
   end
