@@ -20,7 +20,7 @@ feature 'User can add Badge to question', %q(
     scenario 'add Badge' do
       within '.badge' do
         fill_in 'Name', with: 'Badge name test'
-        attach_file 'Image', "#{Rails.root}/spec/fixtures/images/reward.png"
+        attach_file 'Image', "#{Rails.root}/spec/fixtures/images/badge.png"
       end
 
       click_on 'Ask'
@@ -40,7 +40,7 @@ feature 'User can add Badge to question', %q(
 
     scenario 'add invalid Badge name' do
       within '.badge' do
-        attach_file 'Image', "#{Rails.root}/spec/fixtures/images/reward.png"
+        attach_file 'Image', "#{Rails.root}/spec/fixtures/images/badge.png"
       end
 
       click_on 'Ask'

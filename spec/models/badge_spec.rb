@@ -20,6 +20,6 @@ RSpec.describe Badge, type: :model do
   it 'validate image presence' do
     expect(Badge.new(name: 'reward name', question: question)).to_not be_valid
     expect(Badge.new(name: 'reward name', question: question, image: fixture_file_upload("#{Rails.root}/spec/rails_helper.rb", 'text/plain'))).to_not be_valid
-    expect(Badge.new(name: 'reward name', question: question, image: fixture_file_upload("#{Rails.root}/spec/fixtures/images/reward.png", 'image/png'))).to be_valid
+    expect(Badge.new(name: 'reward name', question: question, image: fixture_file_upload("#{Rails.root}/spec/fixtures/images/badge.png", 'image/png'))).to be_valid
   end
 end

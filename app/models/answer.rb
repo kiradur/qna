@@ -16,7 +16,7 @@ class Answer < ApplicationRecord
     return if best
 
     Answer.transaction do
-      Answer.where(question_id: question_id, best: true).update_all(best: false)
+      question.answers.update_all
       update!(best: true)
       update!(badge: question.badge) if question.badge
     end
