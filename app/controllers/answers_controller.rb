@@ -1,42 +1,38 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!
+  include Voted
 
-  def create  
-    @answer = question.answers.new(answer_params)
-    @answer.user = current_user    
-    flash[:notice] = 'Your answer successfully created.' if @answer.save
-  end
+  before_action :authenticate_user!, except: %i[index show]
 
-  def update
-    answer.update(answer_params) if current_user.author?(answer)
-    @question = answer.question
+  helper_method :question
+
+  expose :answers, from: :question
+  expose :answer, scope: -> { Answer.with_attached_files }
+
+  def create
+    question.answers << answer
+    answer.user = current_user
+    answer.save
   end
 
   def destroy
-    if current_user.author?(answer)
-      answer.destroy
-      flash[:notice] = "Answer successfully delete"
-    end
+    answer.destroy if current_user.author_of?(answer)
+  end
+
+  def update
+    answer.update(answer_params) if current_user.author_of?(answer)
   end
 
   def best
-    answer.check_best if current_user.author?(answer)      
+    answer.best! if current_user.author_of?(question)
   end
 
   private
 
   def question
-    @question ||= Question.find(params[:question_id]) 
+    Question.find_by(id: params[:question_id]) || answer.question
   end
-
-  def answer
-    @answer ||= params[:id] ? Answer.with_attached_files.find(params[:id]) : Answer.new
-  end
-
-  helper_method :question, :answer
 
   def answer_params
-    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url,  :_destroy])
-  end  
-
+    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy])
+  end
 end

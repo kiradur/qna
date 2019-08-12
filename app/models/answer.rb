@@ -1,16 +1,16 @@
 class Answer < ApplicationRecord
+  include Votable
+
+  has_many :links, as: :linkable, dependent: :destroy
   belongs_to :question
   belongs_to :user
-  has_many :links, dependent: :destroy, as: :linkable
-  
   has_one :badge
-  has_many_attached :files
 
   accepts_nested_attributes_for :links, reject_if: :all_blank, allow_destroy: true
 
-  validates :body, presence: true
+  has_many_attached :files
 
-  default_scope {order(best: :desc)}
+  validates :body, presence: true
 
    def best!
     return if best
