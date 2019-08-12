@@ -1,1 +1,23 @@
-= render 'form'
+= form_with model: question, local: true do |f|
+  div.question-errors
+    = render 'shared/errors', resource: question
+  .field
+    = f.label :title
+    = f.text_field :title
+  .field
+    = f.label :body
+    = f.text_field :body
+  .field
+    = f.label :files
+    = f.file_field :files, multiple: true, direct_upload: true
+  .badge
+    p Badge
+    = f.fields_for :badge do |r|
+      .field
+        = r.label :name
+        = r.text_field :name
+      .field
+        = r.label :image
+        = r.file_field :image, direct_upload: true  
+  = render 'shared/links_form', form: f
+  = f.submit 'Ask'

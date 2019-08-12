@@ -1,12 +1,23 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]  
 
+  expose :questions, -> { Question.all }
+  expose :question, scope: -> { Question.with_attached_files }
+  expose :answers, from: :question
+  expose :answer, -> { Answer.new }
+
   def index
     @questions = Question.all
+  end
+  
+  def new
+    question.links.new
+    question.build_badge
   end
 
   def show
     @answer = question.answers.new
+    @answer.links.new
   end  
 
   def create
@@ -15,6 +26,7 @@ class QuestionsController < ApplicationController
     if @question.save
       redirect_to @question, notice: 'Your question successfully created.'
     else
+      uestion.build_badge unless question.badge
       render :new
     end  
   end
@@ -48,7 +60,7 @@ class QuestionsController < ApplicationController
   helper_method :question
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url,  :_destroy], badge_attributes: [:image, :name])
   end
 
 end

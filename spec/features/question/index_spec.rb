@@ -1,20 +1,17 @@
 require 'rails_helper'
 
-feature 'User can see question with answers', %q{
-  In order to view question
+feature 'User can see list questions', %q{
+  In order to choose question
   As an user
-  I'd like to be able to see question with answers
+  I'd like to be able to see all questions
 } do
   
-  given(:question) { create(:question) }
-  given!(:answers) { create_list(:answer, 2, question: question) }
+  given!(:questions) { create_list(:question, 3) }
 
-  scenario 'Any user can see question with answers' do
+  scenario 'Any user can see list questions' do
     visit questions_path
-    click_on 'Show'
-    
-    expect(page).to have_content("QuestionTitle")
-    expect(page).to have_content("AnswerBody", count: 2)
+
+    expect(page).to have_content("QuestionTitle", count: 3)
   end
 
 end
