@@ -7,14 +7,14 @@ class Vote < ApplicationRecord
   validate :author_cant_vote
 
   def self.vote_up(user, votable)
-    vote = Vote.where(user: user, votable: votable).find_or_initialize_by(user: user, votable: votable)
-    vote.value += 1
+    vote = Vote.find_or_initialize_by(user: user, votable: votable)
+    vote.value.delete
     destroy_if_revote(vote)
   end
 
   def self.vote_down(user, votable)
-    vote = Vote.where(user: user, votable: votable).find_or_initialize_by(user: user, votable: votable)
-    vote.value -= 1
+    vote = Vote.find_or_initialize_by(user: user, votable: votable)
+    vote.value.delete
     destroy_if_revote(vote)
   end
 
@@ -22,10 +22,8 @@ class Vote < ApplicationRecord
     return vote unless vote.value.zero?
 
     vote.destroy
-    nil
   end
 
-  private_class_method :destroy_if_revote
 
   private
 
