@@ -6,25 +6,6 @@ class Vote < ApplicationRecord
 
   validate :author_cant_vote
 
-  def self.vote_up(user, votable)
-    vote = Vote.find_or_initialize_by(user: user, votable: votable)
-    vote.value.delete
-    destroy_if_revote(vote)
-  end
-
-  def self.vote_down(user, votable)
-    vote = Vote.find_or_initialize_by(user: user, votable: votable)
-    vote.value.delete
-    destroy_if_revote(vote)
-  end
-
-  def self.destroy_if_revote(vote)
-    return vote unless vote.value.zero?
-
-    vote.destroy
-  end
-
-
   private
 
   def author_cant_vote

@@ -1,31 +1,34 @@
-div.answer id='answer-#{answer.id}'
+- if answer.persisted?
+  div id="answer-#{answer.id}" class=("best-answer" if answer.best)
+    = answer.body
+    = render 'shared/vote', resource: answer
+      
+    - if current_user&.author?(answer)
+      = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      | |
+      = link_to 'Delete answer', answer, remote: true, method: :delete
+    - if current_user&.author?(answer.question)  
+      = link_to 'Best', best_answer_path(answer), method: :patch, remote: true
 
-  p= answer.body
-  -if current_user&.author_of?(answer)
-    - if answer.files.attached?
-      = render 'shared/attachments', attachments: answer.files
-    = link_to 'Delete answer', answer, remote: true, method: :delete
-    = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-  -if !answer.best? && current_user&.author_of?(question)
-    =link_to 'Best', best_answer_path(answer), method: :post, remote: true
+      .answer-edit  
+        = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
+          p
+            = f.label :body, 'Your answer'
+            = f.text_area :body
+          p
+            = f.label :files
+            = f.file_field :files, multiple: true, direct_upload: true 
 
-  .votes
-    -if current_user && !current_user.author_of?(answer)
-      = link_to 'Vote up', vote_up_answer_path(answer), class: '.vote-up', method: :post, remote: true
-    .votes-count= answer.rating
-    -if current_user && !current_user.author_of?(answer)
-      = link_to 'Vote down', vote_down_answer_path(answer), class: '.vote-down', method: :post, remote: true
+          = fields_for :links do |link|
+            = render 'shared/link_form', f: f
+          p  
+            = f.submit 'Save'
 
-  = render 'shared/links', links: answer.links
+    .links-answer
+      - if answer.links.exists?
+         = render 'shared/link', links: answer.links
 
-  = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
-    div.answer-errors
-      = render 'shared/errors', resource: answer
-    .field
-      = f.label :body
-      = f.text_area :body
-    .field
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
-    = render 'shared/links_form', form: f
-    = f.submit 'Save'
+    .attachments-answer      
+      - if answer.files.attached? 
+        = render 'shared/attachments', resource: answer      
+      br

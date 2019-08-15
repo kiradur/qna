@@ -31,10 +31,7 @@ module Votable
     if vote
       vote.destroy
     else
-      begin
-        votes.create!(value: value, user: user)
-      rescue => err
-        err.record
-      end  
-    end 
+      votes.create(score: score, user: user)
+    end  
+  end 
 end

@@ -1,125 +1,84 @@
-require 'rails_helper'
+shared_examples_for "voted" do  
+  let(:user)          { create(:user) }
+  let(:other_user)    { create(:user) }
+ 
 
-RSpec.shared_examples 'voted controller' do
-  let(:model_klass) { described_class.controller_name.singularize.to_sym }
-  let!(:voteable) { create(model_klass) }
-  let(:user) { create(:user) }
-  let!(:owned_voteable) { create(model_klass, user: user) }
-
-  describe 'POST #vote_up' do
-
-    context 'Authenticated user' do
-      before { login(user) }
-
-      context 'with someone elses votable' do
-        it 'can vote' do
-          expect { post :vote_up, params: { id: voteable }, format: :json }.to change(voteable.votes, :count).by(1)
-          expect(voteable.votes.last.value).to eq(1)
-        end
-
-        it 'render json' do
-          post :vote_up, params: { id: voteable }, format: :json
-          json_response = JSON.parse(response.body)
-
-          expect(json_response['model']).to eq voteable.class.name.underscore
-          expect(json_response['object_id']).to eq voteable.id
-          expect(json_response['value']).to eq 1
-        end
-
-        it "can't vote twice" do
-          2.times { post :vote_up, params: { id: voteable }, format: :json }
-          json_response = JSON.parse(response.body)
-
-          expect(response.status).to eq 422
-          expect(json_response['value']).to eq ["You can't vote twice"]
-        end
-      end
-
-      context 'with own votable' do
-        it "can't vote" do
-          expect { post :vote_up, params: { id: owned_voteable }, format: :json }.to_not change(owned_voteable.votes, :count)
-        end
-
-        it 'render json' do
-          post :vote_up, params: { id: owned_voteable }, format: :json
-          json_response = JSON.parse(response.body)
-
-          expect(response.status).to eq 422
-          expect(json_response['user']).to eq ["Author can't vote"]
-        end
-      end
-    end
-
-    context 'Unauthenticated user' do
-      before { logout(user) }
-
-      it "can't vote" do
-        expect { post :vote_up, params: { id: voteable }, format: :json }.to_not change(voteable.votes, :count)
-      end
-
-      it '401 status' do
-        post :vote_up, params: { id: voteable }, format: :json
-
-        expect(response).to have_http_status(401)
-      end
-    end
+  def send_request(action, member)
+    process action, method: :post, params: { id: member }, format: :js
   end
 
-  describe 'POST #vote_down' do
-    context 'Authenticated user' do
+  describe 'POST #vote_up' do  
+    context 'resource non-owner' do
+      before { login(other_user) }
+      
+      it 'assigns requested votable resource to @votable' do     
+        send_request(:vote_up, user_resource)
+        expect(assigns(:votable)).to eq(user_resource)
+      end    
+
+      it 'increase score by 1' do
+        send_request(:vote_up, user_resource)
+        expect(user_resource.rate).to eq(1)
+      end
+
+      it 'responds with json' do
+        send_request(:vote_up, user_resource)
+        expect(response.content_type).to eq('application/json')
+      end
+    end    
+
+    context 'resource owner' do
       before { login(user) }
 
-      context 'with someone elses votable' do
-        it 'can vote' do
-          expect { post :vote_down, params: { id: voteable }, format: :json }.to change(voteable.votes, :count).by(1)
-          expect(voteable.votes.last.value).to eq(-1)
-        end
+      it 'dont save to db' do
+        send_request(:vote_up, user_resource)
+        expect { send_request(:vote_up, user_resource) }.to_not change(Vote, :count)
+      end   
 
-        it 'render json' do
-          post :vote_down, params: { id: voteable }, format: :json
-          json_response = JSON.parse(response.body)
-
-          expect(json_response['model']).to eq voteable.class.name.underscore
-          expect(json_response['object_id']).to eq voteable.id
-          expect(json_response['value']).to eq(-1)
-        end
-
-        it "can't vote twice" do
-          2.times { post :vote_up, params: { id: voteable }, format: :json }
-          json_response = JSON.parse(response.body)
-
-          expect(response.status).to eq 422
-          expect(json_response['value']).to eq ["You can't vote twice"]
-        end
-      end
-
-      context 'with own votable' do
-        it "can't vote" do
-          expect { post :vote_down, params: { id: owned_voteable }, format: :json }.to_not change(owned_voteable.votes, :count)
-        end
-
-        it 'render json' do
-          post :vote_down, params: { id: owned_voteable }, format: :json
-          json_response = JSON.parse(response.body)
-
-          expect(response.status).to eq 422
-          expect(json_response['user']).to eq ["Author can't vote"]
-        end
+      it 'responds with json' do
+        send_request(:vote_up, user_resource)
+        expect(response.content_type).to eq('application/json')
       end
     end
+  end 
 
-    context 'Unauthenticated user' do
-      before { logout(user) }
+  describe 'POST #votedown' do  
+    context 'resource non-owner' do
+      before { login(other_user) }
+  
+      it 'assigns requested votable resource to @votable' do
+        send_request(:vote_down, user_resource)
+        expect(assigns(:votable)).to eq(user_resource)
+      end    
 
-      it "can't vote" do
-        expect { post :vote_up, params: { id: voteable }, format: :json }.to_not change(voteable.votes, :count)
+      it 'increase score by -1' do
+        send_request(:vote_down, user_resource)
+        expect(user_resource.rate).to eq(-1)
       end
 
-      it '401 status' do
-        post :vote_up, params: { id: voteable }, format: :json
+      it 'responds with json' do
+        send_request(:vote_down, user_resource)
+        expect(response.content_type).to eq('application/json')
+      end
+    end    
 
-        expect(response).to have_http_status(401)
+    context 'resource owner' do
+      before { login(user) }
+
+      it 'assigns requested votable resource to @votable' do
+        send_request(:vote_down, user_resource)
+        expect(assigns(:votable)).to eq(user_resource)
+      end   
+
+      it 'dont save to db' do
+        send_request(:vote_down, user_resource)
+        expect { send_request(:vote_down, user_resource) }.to_not change(Vote, :count)
+      end   
+
+      it 'responds with json' do
+        send_request(:vote_down, user_resource)
+        expect(response.content_type).to eq('application/json')
       end
     end
-  end
+  end  
 end

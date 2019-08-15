@@ -1,17 +1,57 @@
-require 'rails_helper'
-
-RSpec.shared_examples 'votable model' do
-  let(:model_klass) { described_class.name.underscore.to_sym }
-  let(:user) { create(:user) }
-  let(:votable) { create(model_klass) }
-  let(:owned_votable) { create(model_klass, user: user) }
-
+shared_examples_for "votable" do  
   it { should have_many(:votes).dependent(:destroy) }
+  
+  let(:user) { create(:user) }
+  let(:other_user) { create(:user) }
+  let(:question) { create(:question, user: user) }
+  
+  describe '#voteup' do
 
-  describe '#rating' do
-    let!(:votes_up) { create_list(:vote, 10, user: create(:user), votable: votable, value: 1) }
-    let!(:votes_down) { create_list(:vote, 3, user: create(:user), votable: votable, value: -1) }
+    context 'user votes for the first time' do
+      it 'increase by 1' do
+        expect { model.vote_up(other_user) }.to change(model, :rating).by(1)
+      end
+    end
 
-    it { expect(votable.rating).to eq 7 }
+    context 'user votes again on the same resource' do      
+      let!(:vote) { create(:vote, votable: model, user: other_user) }
+
+      it 'cancel previous vote' do
+        expect { model.vote_up(other_user) }.to change(model, :rating).by(-1)
+      end
+    end
+
+    context 'user change his vote from negative to positive' do
+      let(:vote) { create(:negative_vote, votable: model, user: other_user) }
+
+      it 'increases by 1' do
+        expect { model.vote_up(other_user) }.to change(model, :rating).by(1)
+      end
+    end
+  end
+
+  describe '#votedown' do
+
+    context 'user votes down for the first time' do
+      it 'decrease by 1' do
+        expect { model.vote_down(other_user) }.to change(model, :rating).by(-1)
+      end
+    end
+
+    context 'user votes down again on the same resource' do      
+      let!(:vote) { create(:negative_vote, votable: model, user: other_user) }
+
+      it 'cancel previous vote' do
+        expect { model.vote_down(other_user) }.to change(model, :rating).by(1)
+      end
+    end
+
+    context 'user change his vote from positive to negative' do
+      let(:vote) { create(:vote, votable: model, user: other_user) }
+
+      it 'increases by 1' do
+        expect { model.vote_down(other_user) }.to change(model, :rating).by(-1)
+      end
+    end
   end
 end
