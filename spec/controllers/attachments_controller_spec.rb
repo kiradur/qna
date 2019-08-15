@@ -1,39 +1,54 @@
 require 'rails_helper'
 
 RSpec.describe AttachmentsController, type: :controller do
-  let(:question) { create(:question) }
-  let(:user) { create(:user) }
-  let(:other_user) { create(:user) }
-
   describe 'DELETE #destroy' do
-    before { login(user) }
-    let!(:file) { fixture_file_upload("#{Rails.root}/spec/rails_helper.rb") }
-    let!(:question) { create(:question, user: user, files: [file]) }
-    let(:answer) { create(:answer, question: question, user: user, files: [file]) }
+    let!(:file) { fixture_file_upload("#{Rails.root}/spec/rails_helper.rb", 'text/plain') }
+    let!(:user) { create(:user) }
 
-    context 'author answer' do
-      it 'remove attachments to the resource' do
-        expect { delete :destroy, params: { id: answer.files.first }, format: :js}.to change(answer.files.attachments, :count).by(-1)
+    context 'authenticated user' do
+      before { login(user) }
+
+      context 'is author of the resource' do
+        let!(:resource) { create(:question, files: [file], user: user) }
+
+        it 'author can remove attached file' do
+          expect { delete :destroy, params: { id: resource.files.first }, format: :js }.to change(resource.files, :count).by(-1)
+        end
+
+        it 'render destroy' do
+          delete :destroy, params: { id: resource.files.first }, format: :js
+
+          expect(response).to render_template :destroy
+        end
       end
 
-      it 'redirects to question', js: true do
-        delete :destroy, params: { id: answer.files.first }, format: :js
-        expect(response).to render_template :destroy
+      context 'is not author of the resource' do
+        let!(:resource) { create(:question, files: [file]) }
+
+        it "can't remove attached file" do
+          expect { delete :destroy, params: { id: resource.files.first }, format: :js }.to_not change(resource.files, :count)
+        end
+
+        it 'render destroy' do
+          delete :destroy, params: { id: resource.files.first }, format: :js
+
+          expect(response).to render_template :destroy
+        end
       end
-    end 
+    end
 
-    context 'not author answer' do
-      before { login(other_user) }
+    context 'unauthenticated user' do
+      let!(:resource) { create(:question, files: [file]) }
 
-      it 'remove attachments to the resource' do
-        expect { delete :destroy, params: { id: answer.files.first }, format: :js }.to_not change(answer.files.attachments, :count)
+      it "can't remove attached file" do
+        expect { delete :destroy, params: { id: resource.files.first }, format: :js }.to_not change(resource.files, :count)
       end
 
-      it 'redirects to question', js: true do
-        delete :destroy, params: { id: answer.files.first }, format: :js
-        expect(response).to render_template :destroy
-      end
+      it '401 status' do
+        delete :destroy, params: { id: resource.files.first }, format: :js
 
-    end 
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 end

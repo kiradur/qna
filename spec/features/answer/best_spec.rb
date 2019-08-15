@@ -1,70 +1,73 @@
 require 'rails_helper'
 
-feature 'User can check best answer', %q{
-  In order to check best answer
-  As an author
-  I'd like to be able to check the answer
-} do
-
+feature 'The author of the question can mark one answer as the best.', %q(
+  In order to mark the correct answer
+  As an authenticated user and question author
+  I'd like to be able to mark one answer as the best
+) do
   given(:user) { create(:user) }
   given(:question) { create(:question, user: user) }
-  given!(:answer) { create_list(:answer, 2, question: question, user: user) }
+  given(:image) { fixture_file_upload("#{Rails.root}/spec/fixtures/images/badge.png", 'image/png') }
+  given!(:badge) { create(:badge, question: question, name: 'reward name', image: image) }
+  given!(:answers) { create_list(:answer, 3, :sequences, question: question) }
+  given(:answer_last) { answers.last }
+  given(:answer_first) { answers.first }
 
-  describe 'Authenticated user', js: true do
-    background do
-      sign_in(user)
+  describe 'As authenticated user', js: true do
+    before { login(user) }
+
+    scenario 'mark one answer as the best' do
+      visit question_path(question)
+
+      within "#answer-#{answer_last.id}" do
+        click_on 'Best'
+        sleep(0.5)
+      end
+
+      within first('.answer') do
+        expect(page).to have_content answer_last.body
+        expect(page).to_not have_link 'Best'
+      end
+    end
+
+    scenario 'mark another answer as the best' do
+      answer_last.best!
 
       visit question_path(question)
-    end
 
-    scenario 'not author answer cant see check best answer' do
-      expect(page).to_not have_link('best')
-    end
-
-    scenario 'can sees to check best answer' do
-      within '.answers' do
-        
-        expect(page).to have_link('Best').twice
-
-      end
-    end  
-
-    scenario 'author answer can check best answer' do
-      within "#answer-#{answer.last.id}" do
+      within "#answer-#{answer_first.id}" do
         click_on 'Best'
+        sleep(0.5)
       end
 
-      within ".best-answer" do
-        expect(current_path).to eq question_path(question)
-        expect(page).to have_content "#{answer.last.body}"
-        expect(page).to_not have_content "#{answer.first.body}"
+      within first('.answer') do
+        expect(page).to have_content answer_first.body
       end
     end
 
-    scenario 'see the best answer in top on list' do
-      within "#answer-#{answer.last.id}" do
+    scenario 'user gets an reward' do
+      visit question_path(question)
+
+      within "#answer-#{answer_last.id}" do
         click_on 'Best'
+        sleep(0.5)
       end
 
-      within first('.answers') do
-        expect(page).to have_content answer.last.body
-      end
+      visit user_badges_path(answer_last.user)
+
+      reward = question.reward
+
+      expect(page).to have_content question.title
+      expect(page).to have_content reward.name
+      expect(page).to have_css "img[src*='#{badge.image.filename}']"
     end
+  end
 
-    context 'can choose another answer for best check' do
-      given!(:best_answer) { create(:answer, question: question, user: user, best: true) }
+  scenario "can't mark the answer as the best in someone else's question" do
+    visit question_path(question)
 
-      scenario 'check another best answer'do        
-        within "#answer-#{answer.first.id}" do
-          click_on 'Best'
-        end
-
-        expect(current_path).to eq question_path(question)
-        within ".best-answer" do
-          expect(page).to have_content "#{answer.first.body}"
-          expect(page).to_not have_content (best_answer.body)
-        end
-      end
-    end  
-  end 
+    within first('.answer') do
+      expect(page).to_not have_link 'Best'
+    end
+  end
 end

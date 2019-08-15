@@ -11,7 +11,7 @@ feature 'User can see their badge', %q(
   given(:question) { create(:question) }
   given!(:badge) { create(:badge, question: question, name: 'first reward', image: image ) }
   given(:second_question) { create(:question) }
-  given!(:second_badge { create(:badge, question: second_question, name: 'second reward', image: second_image) }
+  given!(:second_badge) { create(:badge, question: second_question, name: 'second reward', image: second_image) }
   given(:answer) { create(:answer, question: question, user: user) }
   given(:second_answer) { create(:answer, question: second_question, user: user) }
 

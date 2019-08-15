@@ -1,17 +1,7 @@
-.question-errors
-  = render 'shared/errors', resource: question
-.question 
-  = render 'question'
-
-.answer-errors
-  = render 'shared/errors', resource: @answer 
-h2 Answers
+.question
+  p= render question
 .answers
-  p= render question.answers
-
-hr
-
-h3 Add answer
+  =render question.answers
 p= render 'answers/form'
 
 
