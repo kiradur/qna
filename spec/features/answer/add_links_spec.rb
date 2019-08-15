@@ -1,61 +1,92 @@
 require 'rails_helper'
 
-feature 'User can add links to asnwer', %q{
-  In order to provide additional info to my answer
-  As an answer author
-  I'd like to be able to add likns
-} do
-  given(:user) { create(:user) }
-  given!(:question) { create(:question) }
-  given(:gist_url) { 'https://gist.github.com/snoopsD/bf00aa93c529956c77a6d7b320aa0175' }
-  given(:github_url)  { 'https://github.com/' }
-
-  describe 'Authenticated user', js: true do
+feature 'User can add links to answer', %q(
+  In order to provide additional info to my anwer
+  As an answer's author
+  I'd like to be able to add links
+) do
+  context 'Authentithicated user give answer', js: true do
+    given(:user) { create(:user) }
+    given(:question) { create(:question) }
+    given(:gmail_url) { 'https://gmail.com' }
+    given(:google_url) { 'https://www.google.com' }
+    given(:gist_url) { 'https://gist.github.com/shuklineg/781f42ffe9faad73c559b11cfb20e7aa' }
 
     background do
-      sign_in(user)
+      login(user)
       visit question_path(question)
 
-      fill_in 'Body', with: 'text for answerS'
+      within '.new-answer' do
+        fill_in 'Body', with: 'answer text'
 
-      fill_in 'Link name', with: 'My gist'
+        fill_in 'Link name', with: 'My link'
+        fill_in 'Url', with: gmail_url
+      end
+    end
+
+    scenario 'with link' do
+      click_on 'Answer the question'
+
+      within '.answers' do
+        expect(page).to have_link 'My link', href: gmail_url
+      end
+    end
+
+    scenario 'with links' do
+      within '.new-answer' do
+        click_on 'Add link'
+
+        within all('.link-fields').last do
+          fill_in 'Link name', with: 'Google'
+          fill_in 'Url', with: google_url
+        end
+      end
+
+      click_on 'Answer the question'
+
+      within '.answers' do
+        expect(page).to have_link 'My link', href: gmail_url
+        expect(page).to have_link 'Google', href: google_url
+      end
+    end
+
+    scenario 'with invalid link' do
+      within '.new-answer' do
+        fill_in 'Url', with: 'invalid_url'
+      end
+
+      click_on 'Answer the question'
+
+      within '.answer-errors' do
+        expect(page).to have_content 'Links url must be a valid URL'
+      end
+
+      expect(page).to_not have_link 'My link', href: 'invalid_url'
+    end
+
+    scenario 'with gist link' do
       fill_in 'Url', with: gist_url
-    end
 
-    scenario 'adds link when send answer' do 
-      click_on 'Post answer'
+      click_on 'Answer the question'
 
-      expect(page).to have_content('test1 test2 test3')
-    end
-
-    scenario 'add links' do
-      click_on 'add link'
-
-      within all('.nested-fields')[1] do
-        fill_in 'Link name', with: 'github'
-        fill_in 'Url', with: github_url
+      within '.answers' do
+        expect(page).to have_content 'Test text'
+        expect(page).to have_content 'test.txt'
       end
-
-      click_on 'Post answer'
-
-      expect(page).to have_content('test1 test2 test3')
-      expect(page).to have_link 'github', href: github_url
     end
-
-    scenario 'add invalid link' do
-      click_on 'add link'
-      
-      within all('.nested-fields')[1] do
-        fill_in 'Link name', with: 'github'
-        fill_in 'Url', with: 'something wrong'
-      end
-
-      click_on 'Post answer'
-  
-      expect(page).to have_content('Links url provided invalid')
-    end
-
-
   end
 
+  context 'Unauthentithicated user', js: true do
+    given(:answer) { create(:answer) }
+    given(:gmail_url) { 'https://gmail.com' }
+    given!(:link) { create(:link, linkable: answer, name: 'My link', url: gmail_url) }
+
+    scenario 'can see links' do
+      visit question_path(answer.question)
+
+      within '.answers' do
+        expect(page).to have_link 'My link', href: gmail_url
+      end
+    end
+  end
 end
