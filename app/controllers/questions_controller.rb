@@ -10,6 +10,10 @@ class QuestionsController < ApplicationController
   expose :answer, -> { Answer.new }
   expose :comment, -> { question.comments.new }
 
+  def index
+    @questions = Question.all
+  end
+
   def show
     answer.links.new
   end

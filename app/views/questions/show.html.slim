@@ -1,8 +1,16 @@
-.question data-question-id="#{question.id}"
-  p= render question
-.answers
-  =render question.answers
-- if current_user
-  p= render 'answers/form'
+.question-errors
+  = render 'shared/errors', resource: question
+.question data-id="#{question.id}"
+  = render 'question'
 
+.answer-errors
+  = render 'shared/errors', resource: @answer 
+h2 Answers
+.answers
+  p= render question.answers
+
+hr
+
+h3 Add answer
+p= render 'answers/form'
 
