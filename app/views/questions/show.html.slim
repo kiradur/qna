@@ -1,7 +1,8 @@
-.question
+.question data-question-id="#{question.id}"
   p= render question
 .answers
   =render question.answers
-p= render 'answers/form'
+- if current_user
+  p= render 'answers/form'
 
 

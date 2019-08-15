@@ -23,6 +23,7 @@
             = render 'shared/link_form', f: f
           p  
             = f.submit 'Save'
+           = render 'shared/comments', commentable: answer  
 
     .links-answer
       - if answer.links.exists?
