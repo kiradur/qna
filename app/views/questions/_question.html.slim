@@ -30,3 +30,5 @@ p=  question.body
           = render 'shared/link_form', f: f
         p
           = f.submit 'Save'
+
+= render 'comments/comments', resource: question    

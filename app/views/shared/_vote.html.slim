@@ -1,5 +1,5 @@
  div class="#{resource.class.to_s.downcase}-votes"
-    = link_to '+', polymorphic_url([:voteup, resource]), method: :post, remote: true, data: { type: :json }
+    = link_to '+', polymorphic_url([:vote_up, resource]), method: :post, remote: true, data: { type: :json }
     div class="#{resource.class.to_s.downcase}-score"
-      p= resource.rate
-    = link_to '-', polymorphic_url([:votedown, resource]), method: :post, remote: true, data: { type: :json }
+      p= resource.rating
+    = link_to '-', polymorphic_url([:vote_down, resource]), method: :post, remote: true, data: { type: :json }

@@ -2,11 +2,17 @@ class QuestionsController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: %i[index show]
+  after_action :publish_question, only: :create
 
   expose :questions, -> { Question.all }
   expose :question, scope: -> { Question.with_attached_files }
   expose :answers, from: :question
   expose :answer, -> { Answer.new }
+  expose :comment, -> { question.comments.new }
+
+  def index
+    @questions = Question.all
+  end
 
   def show
     answer.links.new
@@ -41,6 +47,17 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def publish_question
+    return if question.errors.any?
+
+    ActionCable.server.broadcast(
+      'questions',
+      question: question,
+      links: question.links,
+      files: question.files.map { |file| { id: file.id, name: file.filename.to_s, url: url_for(file) } }
+    )
+  end
 
   def question_params
     params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy], badge_attributes: [:image, :name])

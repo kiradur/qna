@@ -2,11 +2,13 @@ class AnswersController < ApplicationController
   include Voted
 
   before_action :authenticate_user!, except: %i[index show]
+  after_action :publish_answer, only: :create
 
   helper_method :question
 
   expose :answers, from: :question
   expose :answer, scope: -> { Answer.with_attached_files }
+  expose :comment, -> { answer.comments.new }
 
   def create
     question.answers << answer
@@ -27,6 +29,17 @@ class AnswersController < ApplicationController
   end
 
   private
+
+  def publish_answer
+    return if answer.errors.any?
+
+    AnswersChannel.broadcast_to(
+      answer.question,
+      answer: answer,
+      links: answer.links,
+      files: answer.files.map { |file| { id: file.id, name: file.filename.to_s, url: url_for(file) } }
+    )
+  end
 
   def question
     Question.find_by(id: params[:question_id]) || answer.question
