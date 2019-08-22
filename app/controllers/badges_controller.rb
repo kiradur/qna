@@ -2,5 +2,7 @@ class BadgesController < ApplicationController
   expose :user
   expose :badges, -> { user.badges }
 
-  def index; end
+  def index
+    authorize! :index, Badge
+  end
 end
