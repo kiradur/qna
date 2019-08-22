@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   root to: 'questions#index'
 
-  devise_for :users
+  resource :authorization, only: %i[new create] do
+    get 'email_confirmation/:confirmation_token', action: :email_confirmation, as: :email_confirmation
+  end
+
+  devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
 
   resources :users do
     resources :rewards, only: %i[index]
