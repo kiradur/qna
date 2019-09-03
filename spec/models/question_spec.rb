@@ -4,7 +4,8 @@ RSpec.describe Question, type: :model do
   let(:question) { create(:question) }
 
   it_behaves_like 'votable model'
-   it_behaves_like 'commentable model'
+  it_behaves_like 'commentable model'
+  it_behaves_like 'linkable model'
 
   it { should have_many(:answers).dependent(:destroy).order(best: :desc) }
   it { should have_many(:links).dependent(:destroy) }
