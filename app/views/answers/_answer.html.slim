@@ -3,11 +3,11 @@
     = answer.body
     = render 'shared/vote', resource: answer
       
-    - if current_user&.author?(answer)
+    - if can? :update, answer
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
-      | |
+    -if can? :destroy, answer
       = link_to 'Delete answer', answer, remote: true, method: :delete
-    - if current_user&.author?(answer.question)  
+    -if !answer.best? && can?(:best, answer)  
       = link_to 'Best', best_answer_path(answer), method: :patch, remote: true
 
       .answer-edit  
