@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   root to: 'questions#index'
 
   resource :authorization, only: %i[new create] do
@@ -34,4 +35,16 @@ Rails.application.routes.draw do
   resources :links, only: :destroy
 
   mount ActionCable.server => '/cable'
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: %i[index] do
+        get :me, on: :collection
+      end
+
+      resources :questions, only: %i[index show destroy create update] do
+        resources :answers, shallow: true, only: %i[index show destroy create update]
+      end
+    end
+  end
 end
