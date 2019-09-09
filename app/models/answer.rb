@@ -24,7 +24,7 @@ class Answer < ApplicationRecord
     end
   end
 
-  def best?
-    best
+  def subscription_job
+    QuestionSubscriptionJob.perform_later(self)
   end
 end

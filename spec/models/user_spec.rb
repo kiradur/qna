@@ -5,11 +5,13 @@ RSpec.describe User, type: :model do
   it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:badges).through(:answers) }
   it { should have_many(:votes) }
+  it { should have_many(:authorizations).dependent(:destroy) }
+  it { should have_many(:subscriptions).dependent(:destroy) }
 
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
 
-  describe 'User#author_of?' do
+  describe '#author_of?' do
     let(:user) { create(:user) }
     let(:owned_question) { create(:question, user: user) }
     let(:someone_elses_answer) { create(:answer, question: owned_question, user: create(:user)) }
@@ -97,6 +99,31 @@ RSpec.describe User, type: :model do
     it 'auth confirmed' do
       authorization.confirm!
       expect(user).to be_auth_confirmed(auth)
+    end
+  end
+
+  describe '#subscribed?' do
+    let!(:user) { create(:user) }
+    let!(:question) { create(:question) }
+
+    it 'subscribed' do
+      expect(user).to_not be_subscribed(question)
+    end
+
+    it 'is not subscribed' do
+      Subscription.create(question: question, user: user)
+
+      expect(user).to be_subscribed(question)
+    end
+  end
+
+  describe '#subscription' do
+    let!(:user) { create(:user) }
+    let!(:question) { create(:question) }
+    let!(:subscription) { create(:subscription, user: user, question: question) }
+
+    it 'return subscription' do
+      expect(user.subscription(question)).to eq subscription
     end
   end
 end

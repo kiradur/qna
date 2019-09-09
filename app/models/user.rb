@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :badges, through: :answers
   has_many :votes, dependent: :destroy
   has_many :authorizations, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   def author?(object)
     object.user_id == self.id
@@ -33,5 +34,13 @@ class User < ApplicationRecord
 
   def auth_confirmed?(auth)
     auth && authorizations.find_by(uid: auth.uid, provider: auth.provider)&.confirmed?
+  end
+
+  def subscribed?(question)
+    !!subscription(question)
+  end
+
+  def subscription(question)
+    subscriptions.find_by(question_id: question.id)
   end
 end
