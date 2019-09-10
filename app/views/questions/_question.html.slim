@@ -13,6 +13,9 @@ p=  question.body
      =link_to 'Delete question', question, method: :delete         
 -if can? :update, question
      =link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
+-if can? :create, Subscription
+    .subscription
+      = render 'subscriptions/subscription', question: question  
 
   .question-edit  
       = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|

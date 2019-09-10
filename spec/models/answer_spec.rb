@@ -7,15 +7,19 @@ RSpec.describe Answer, type: :model do
 
   it { should belong_to :question }
   it { should belong_to :user }
-  it { should have_many(:links).dependent(:destroy) }
   it { should have_one(:badge) }
 
   it { should validate_presence_of :body }
 
-  it { should accept_nested_attributes_for :links }
 
   it 'have many attached files' do
     expect(Answer.new.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
+
+  it 'perform question subscription job' do
+    expect(QuestionSubscriptionJob).to receive(:perform_later).with(instance_of(Answer))
+
+    Answer.create(body: 'Answer body', user: create(:user), question: create(:question))
   end
 
   describe 'Answer best!' do
@@ -42,13 +46,5 @@ RSpec.describe Answer, type: :model do
       it { expect(best_answer.reload).to_not be_best }
       it { expect(second_question_answer.reload).to be_best }
     end
-  end
-
-  describe 'Answer best?' do
-    let(:answer) { create(:answer) }
-    let(:best_answer) { create(:answer, best: true) }
-
-    it { expect(answer).to_not be_best }
-    it { expect(best_answer).to be_best }
   end
 end

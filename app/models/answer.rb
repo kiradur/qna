@@ -14,6 +14,8 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_create :subscription_job
+
    def best!
     return if best
 
@@ -24,7 +26,7 @@ class Answer < ApplicationRecord
     end
   end
 
-  def best?
-    best
+  def subscription_job
+    QuestionSubscriptionJob.perform_later(self)
   end
 end
