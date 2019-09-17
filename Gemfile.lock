@@ -47,24 +47,18 @@ GEM
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
-    addressable (2.6.0)
-      public_suffix (>= 2.0.2, < 4.0)
+    addressable (2.7.0)
+      public_suffix (>= 2.0.2, < 5.0)
     airbrussh (1.3.4)
       sshkit (>= 1.6.1, != 1.7.0)
     archive-zip (0.12.0)
       io-like (~> 0.3.0)
     arel (9.0.0)
-<<<<<<< HEAD
     autoprefixer-rails (9.6.1.1)
       execjs
     aws-eventstream (1.0.3)
     aws-partitions (1.213.0)
     aws-sdk-core (3.68.0)
-=======
-    aws-eventstream (1.0.3)
-    aws-partitions (1.203.0)
-    aws-sdk-core (3.64.0)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
       aws-eventstream (~> 1.0, >= 1.0.2)
       aws-partitions (~> 1.0)
       aws-sigv4 (~> 1.1)
@@ -72,23 +66,15 @@ GEM
     aws-sdk-kms (1.24.0)
       aws-sdk-core (~> 3, >= 3.61.1)
       aws-sigv4 (~> 1.1)
-<<<<<<< HEAD
     aws-sdk-s3 (1.48.0)
-=======
-    aws-sdk-s3 (1.46.0)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
       aws-sdk-core (~> 3, >= 3.61.1)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
     bcrypt (3.1.13)
-<<<<<<< HEAD
-    bindex (0.7.0)
-=======
     bindex (0.8.1)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
-    bootsnap (1.4.4)
+    bootsnap (1.4.5)
       msgpack (~> 1.0)
     bootstrap (4.3.1)
       autoprefixer-rails (>= 9.1.0)
@@ -97,7 +83,6 @@ GEM
     builder (3.2.3)
     byebug (11.0.1)
     cancancan (3.0.1)
-<<<<<<< HEAD
     capistrano (3.11.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -118,10 +103,7 @@ GEM
       sidekiq (>= 3.4)
     capistrano3-unicorn (0.2.1)
       capistrano (~> 3.1, >= 3.1.0)
-    capybara (3.25.0)
-=======
-    capybara (3.28.0)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
+    capybara (3.29.0)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -134,7 +116,7 @@ GEM
       mail
     case_transform (0.2)
       activesupport
-    childprocess (1.0.1)
+    childprocess (2.0.0)
       rake (< 13.0)
     chromedriver-helper (2.1.1)
       archive-zip (~> 0.10)
@@ -154,22 +136,14 @@ GEM
     database_cleaner (1.7.0)
     decent_exposure (3.0.0)
       activesupport (>= 4.0)
-<<<<<<< HEAD
     devise (4.7.1)
-=======
-    devise (4.7.0)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
     diff-lcs (1.3)
-<<<<<<< HEAD
     doorkeeper (5.2.0)
-=======
-    doorkeeper (5.1.0)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
       railties (>= 5)
     erubi (1.8.0)
     execjs (2.7.0)
@@ -203,18 +177,12 @@ GEM
       thor (>= 0.14, < 2.0)
     jsonapi-renderer (0.2.2)
     jwt (2.2.1)
-<<<<<<< HEAD
     kgio (2.11.2)
-=======
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
     launchy (2.4.3)
       addressable (~> 2.3)
     letter_opener (1.7.0)
       launchy (~> 2.2)
-<<<<<<< HEAD
     libv8 (7.3.492.27.1)
-=======
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -234,23 +202,16 @@ GEM
     mini_racer (0.2.6)
       libv8 (>= 6.9.411)
     minitest (5.11.3)
-<<<<<<< HEAD
-    msgpack (1.3.0)
-=======
     msgpack (1.3.1)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
     multi_json (1.13.1)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     mustermann (1.0.3)
     mysql2 (0.5.2)
-<<<<<<< HEAD
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
     net-ssh (5.2.0)
-=======
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
-    nio4r (2.4.0)
+    nio4r (2.5.1)
     nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     oauth2 (1.4.1)
@@ -276,7 +237,7 @@ GEM
     orm_adapter (0.5.0)
     pg (1.1.4)
     popper_js (1.14.5)
-    public_suffix (3.1.1)
+    public_suffix (4.0.1)
     puma (3.12.1)
     rack (2.0.7)
     rack-protection (2.0.7)
@@ -311,21 +272,13 @@ GEM
       method_source
       rake (>= 0.8.7)
       thor (>= 0.19.0, < 2.0)
-<<<<<<< HEAD
     raindrops (0.19.0)
-    rake (12.3.2)
-=======
     rake (12.3.3)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     redis (4.1.2)
-<<<<<<< HEAD
-    regexp_parser (1.5.1)
-=======
     regexp_parser (1.6.0)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
     request_store (1.4.1)
       rack (>= 1.4)
     responders (3.0.0)
@@ -350,7 +303,7 @@ GEM
       rspec-support (~> 3.8.0)
     rspec-support (3.8.2)
     ruby_dep (1.5.0)
-    rubyzip (1.2.3)
+    rubyzip (1.2.4)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
@@ -362,7 +315,6 @@ GEM
       sprockets (>= 2.8, < 4.0)
       sprockets-rails (>= 2.0, < 4.0)
       tilt (>= 1.1, < 3)
-<<<<<<< HEAD
     sassc (2.2.0)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
@@ -371,13 +323,11 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-=======
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    selenium-webdriver (3.142.3)
-      childprocess (>= 0.5, < 2.0)
+    selenium-webdriver (3.142.4)
+      childprocess (>= 0.5, < 3.0)
       rubyzip (~> 1.2, >= 1.2.2)
     shoulda-matchers (4.1.2)
       activesupport (>= 4.2.0)
@@ -414,14 +364,10 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-<<<<<<< HEAD
     sshkit (1.20.0)
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     temple (0.8.2)
-=======
-    temple (0.8.1)
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
     thinking-sphinx (4.4.1)
       activerecord (>= 3.1.0)
       builder (>= 2.1.2)
@@ -439,12 +385,9 @@ GEM
       thread_safe (~> 0.1)
     uglifier (4.1.20)
       execjs (>= 0.3.0, < 3)
-<<<<<<< HEAD
     unicorn (5.5.1)
       kgio (~> 2.6)
       raindrops (~> 0.7)
-=======
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (3.7.0)
@@ -470,7 +413,6 @@ DEPENDENCIES
   bootstrap
   byebug
   cancancan
-<<<<<<< HEAD
   capistrano
   capistrano-bundler
   capistrano-passenger
@@ -478,8 +420,6 @@ DEPENDENCIES
   capistrano-rvm
   capistrano-sidekiq
   capistrano3-unicorn
-=======
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
   capybara
   capybara-email
   chromedriver-helper
@@ -496,10 +436,7 @@ DEPENDENCIES
   launchy
   letter_opener
   listen (>= 3.0.5, < 3.2)
-<<<<<<< HEAD
   mini_racer
-=======
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
   mysql2
   octokit (~> 4.0)
   oj

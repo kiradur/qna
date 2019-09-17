@@ -57,13 +57,9 @@ gem 'sinatra', require: false
 gem 'whenever', require: false
 gem 'thinking-sphinx'
 gem 'mysql2'
-<<<<<<< HEAD
 gem 'mini_racer'
 gem 'bootstrap'
 gem 'unicorn'
-=======
-
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -81,7 +77,6 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem "letter_opener"
-<<<<<<< HEAD
 
   gem 'capistrano', require: false
   gem 'capistrano-bundler', require: false
@@ -90,8 +85,6 @@ group :development do
   gem 'capistrano-passenger', require: false
   gem 'capistrano-sidekiq', require: false
   gem 'capistrano3-unicorn', require: false
-=======
->>>>>>> 959dcbbc636e76e83d4d1bf42d36ac3db4f5bd1b
 end
 
 group :test do
