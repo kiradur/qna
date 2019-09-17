@@ -1,0 +1,16 @@
+.question-errors
+  = render 'shared/errors', resource: question
+.question data-id="#{question.id}"
+  = render 'question'
+
+.answer-errors
+  = render 'shared/errors', resource: @answer 
+h2 Answers
+.answers
+  p= render question.answers
+
+hr
+
+h3 Add answer
+p= render 'answers/form'
+
