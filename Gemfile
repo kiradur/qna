@@ -36,10 +36,36 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
+gem 'slim-rails'
+gem 'decent_exposure', '3.0.0'
+gem 'devise'
+gem 'jquery-rails'
+gem 'aws-sdk-s3'
+gem 'cocoon'
+gem "octokit", "~> 4.0"
+gem 'gon'
+gem 'skim'
+gem 'omniauth'
+gem 'omniauth-github'
+gem 'omniauth-vkontakte'
+gem 'cancancan'
+gem 'doorkeeper'
+gem 'active_model_serializers', '~> 0.10.0'
+gem 'oj'
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'whenever', require: false
+gem 'thinking-sphinx'
+gem 'mysql2'
+gem 'mini_racer'
+gem 'bootstrap'
+gem 'unicorn'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails' , '~> 3.8'
+  gem 'rspec-rails', '~> 3.8'
+  gem 'rails-controller-testing'
   gem 'factory_bot_rails'
 end
 
@@ -50,14 +76,25 @@ group :development do
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem "letter_opener"
+
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rvm', require: false
+  gem 'capistrano-passenger', require: false
+  gem 'capistrano-sidekiq', require: false
+  gem 'capistrano3-unicorn', require: false
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
+  gem 'capybara'
+  gem 'launchy'
+  gem 'shoulda-matchers'
   gem 'selenium-webdriver'
-  # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+  gem 'capybara-email'
+  gem 'database_cleaner'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
