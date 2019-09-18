@@ -13,7 +13,7 @@ require "action_cable/engine"
 require "sprockets/railtie"
 require 'uglifier'
 
-Uglifier.compile(js, harmony: true)
+Uglifier.compile(harmony: true)
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
