@@ -1,5 +1,7 @@
 {
   "name": "qna",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "uglify-js": "git://github.com/mishoo/UglifyJS2"
+  }
 }
