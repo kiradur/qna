@@ -28,3 +28,4 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
     @auth = request.env['omniauth.auth']
     @user = User.find_for_oauth(@auth)
   end
+ end 
