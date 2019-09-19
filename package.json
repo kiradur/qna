@@ -1,15 +1,13 @@
 {
   "name": "qna",
   "private": true,
+  "babel": { 
+     "presets": ["es2015" , "stage-2"] 
+    } ,
   "dependencies": {
     "uglify-js": "git://github.com/mishoo/UglifyJS2"
   },
   "devDependencies": {
     "@babel/preset-es2015": "^7.0.0-beta.53"
-  },
-   "config": { 
-   "babel": { 
-     "presets": ["es2015" , "stage-2"] 
-    } 
-    } 
+  }
 }
