@@ -17,7 +17,7 @@ p=  question.body
     .subscription
       = render 'subscriptions/subscription', question: question  
 
-  .question-edit  
+question-edit  
       = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|
         p
           = f.label :title
