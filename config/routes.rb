@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: { omniauth_callbacks: 'oauth_callbacks' }
 
   resources :users do
-    resources :rewards, only: %i[index]
+    resources :badges, only: %i[index]
   end
 
   concern :votable do

@@ -3,7 +3,7 @@ nav.navbar.navbar-expand.navbar-dark.bg-dark
     ul.navbar-nav
       li.nav-item= link_to 'Questions', questions_path, class: 'nav-link'
       - if current_user
-        li.nav-item= link_to 'Rewards', user_rewards_path(current_user), class: 'nav-link'
+        li.nav-item= link_to 'Badges', user_badges_path(current_user), class: 'nav-link'
       - if can? :read, Search
         li.nav-item= link_to 'Search', search_path, class: 'nav-link'
       - if current_user
