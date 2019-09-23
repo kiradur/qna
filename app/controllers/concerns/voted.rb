@@ -2,12 +2,12 @@ module Voted
   extend ActiveSupport::Concern
 
   def vote_up
-    authorize! :vote_up, @votable
-    @votable.vote_up(current_user)
+    authorize! :vote_up, votable
+    vote = Vote.vote_up(current_user, votable)
     respond_to do |format|
       format.json do
         if vote.nil? || vote.save
-          render json: { object_id: @votable.id, value: @votable.rating, model: @votable.class.name.underscore }
+          render json: { object_id: votable.id, value: votable.rating, model: votable.class.name.underscore }
         else
           render json: vote.errors, status: :unprocessable_entity
         end
@@ -16,12 +16,12 @@ module Voted
   end
 
   def vote_down
-    authorize! :vote_down, @votable
-    @votable.vote_down(current_user)
+    authorize! :vote_down, votable
+    vote = Vote.vote_down(current_user, votable)
     respond_to do |format|
       format.json do
         if vote.nil? || vote.save
-          render json: { object_id: @votable.id, value: @votable.rating, model: @votable.class.name.underscore }
+          render json: { object_id: votable.id, value: votable.rating, model: votable.class.name.underscore }
         else
           render json: vote.errors, status: :unprocessable_entity
         end
@@ -32,6 +32,6 @@ module Voted
   private
 
   def votable
-    @votable = controller_name.singularize
+    send(controller_name.singularize)
   end
 end
