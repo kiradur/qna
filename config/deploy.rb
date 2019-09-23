@@ -27,5 +27,4 @@ append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/syst
 # set :ssh_options, verify_host_key: :secure
 after 'deploy:publishing', 'unicorn:restart'
 
-SSHKit.config.command_map[:sidekiq] = "bundle exec sidekiq"
-SSHKit.config.command_map[:sidekiqctl] = "bundle exec sidekiqctl"
+set :rbenv_map_bins, fetch(:rbenv_map_bins).to_a.concat(%w(sidekiq sidekiqctl))
