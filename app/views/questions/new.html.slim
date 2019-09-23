@@ -10,9 +10,9 @@
   .field.form-group
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true, class: 'form-control-file'
-  .reward
-    h5 Reward:
-    = f.fields_for :reward do |r|
+  .badge
+    h5 Badge:
+    = f.fields_for :badge do |r|
       .field.form-group
         = r.label :name
         = r.text_field :name, class: 'form-control'
