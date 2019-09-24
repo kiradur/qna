@@ -1,12 +1,12 @@
-h4 Comments
+h5 Comments:
 div.comments data-commentable="#{commentable.class.name.underscore}" data-commentable-id="#{commentable.id}" = render commentable.comments
 - if current_user
   = link_to 'Add comment', '#', class: 'add-comment-link', data: { commentable: "#{commentable.class.name.underscore}-#{commentable.id}" }
   = form_with model: [commentable, comment], class: 'comment-form hidden', id: "comment-form-#{commentable.class.name.underscore}-#{commentable.id}" do |f|
     div.comment-errors
       = render 'shared/errors', resource: comment
-    .field
+    .field.form-group
       = f.label :body
-      = f.text_field :body
-    = f.submit 'Comment'
+      = f.text_field :body, class: 'form-control'
+    = f.submit 'Comment', class: 'btn btn-primary'
   
