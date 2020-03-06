@@ -19,17 +19,17 @@ class AnswersController < ApplicationController
 
   def destroy
     authorize! :destroy, answer
-    answer.destroy if current_user.author_of?(answer)
+    answer.destroy
   end
 
   def update
     authorize! :update, answer
-    answer.update(answer_params) if current_user.author_of?(answer)
+    answer.update(answer_params)
   end
 
   def best
     authorize! :best, answer
-    answer.best! if current_user.author_of?(question)
+    answer.best!
   end
 
   private

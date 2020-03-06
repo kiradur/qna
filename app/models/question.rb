@@ -3,6 +3,8 @@ class Question < ApplicationRecord
   include Commentable
   include Linkable
 
+  default_scope { order(id: :asc) }
+
   has_many :answers, -> { order(best: :desc) }, dependent: :destroy
   has_many :links, as: :linkable, dependent: :destroy
   has_one :badge

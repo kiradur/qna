@@ -4,7 +4,7 @@ class Answer < ApplicationRecord
   include Linkable
 
   has_many :links, as: :linkable, dependent: :destroy
-  belongs_to :question
+  belongs_to :question, touch: true
   belongs_to :user
   has_one :badge
 
